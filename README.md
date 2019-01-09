@@ -8,3 +8,5 @@
   - Bボタン: X
   - STARTボタン: Enter
   - SELECTボタン: Space
+- RPGアツマールにも投稿してみました
+  - [https://game.nicovideo.jp/atsumaru/games/gm9628](https://game.nicovideo.jp/atsumaru/games/gm9628)
