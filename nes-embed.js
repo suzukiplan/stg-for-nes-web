@@ -144,20 +144,6 @@ function nes_load_url(canvas_id, path) {
     };
 
     req.send();
-    drawRanking();
-}
-
-function drawRanking() {
-    canvas_ctx.fillStyle = "#FFFFFF";
-    var w = 100;
-    var h = 16;
-    var x = 260;
-    var y = 4;
-    //canvas_ctx.fillRect(x, y, w, h);
-    //canvas_ctx.strokeRect(x, y, w, h);
-    canvas_ctx.fillStyle = "#000000";
-    canvas_ctx.textAlign = "center";
-    canvas_ctx.fillText("RANKING", x + w / 2, y + h / 2);
 }
 
 document.addEventListener('keydown', (event) => {
