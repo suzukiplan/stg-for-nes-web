@@ -8,7 +8,13 @@
 
     <script type="text/javascript" src="jsnes.min.js"></script>
     <script type="text/javascript" src="nes-embed.js"></script>
+    <script type="text/javascript" src="AtsumaruScoreboardsExperimental.js"></script>
     <script>
+        window.onGameOver = function(score) {
+            console.log("GAME OVER: SCORE=" + score);
+            window.RPGAtsumaru.experimental.scoreboards.setRecord(1, score);
+            window.RPGAtsumaru.experimental.scoreboards.display(1);
+        }
         window.onload = function() {
             nes_load_url("nes-canvas", "stg.png");
         }

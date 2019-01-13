@@ -24,12 +24,21 @@ var nes = new jsnes.NES({
     },
 });
 
+var detectGameOver = false;
+
 function onAnimationFrame() {
     window.requestAnimationFrame(onAnimationFrame);
-
     image.data.set(framebuffer_u8);
     canvas_ctx.putImageData(image, 0, 0);
     nes.frame();
+    if (window.onGameOver) {
+        if (!window.detectGameOver && 0 != nes.cpu.mem[1] && 0 == nes.cpu.mem[15]) {
+            window.detectGameOver = true;
+            window.onGameOver(10 * (parseInt(nes.cpu.mem[22]) + parseInt(nes.cpu.mem[23]) * 256 + parseInt(nes.cpu.mem[24]) * 65536));
+        } else if (0 == nes.cpu.mem[1]) {
+            window.detectGameOver = false;
+        }
+    }
 }
 
 function audio_remain() {
@@ -135,6 +144,20 @@ function nes_load_url(canvas_id, path) {
     };
 
     req.send();
+    drawRanking();
+}
+
+function drawRanking() {
+    canvas_ctx.fillStyle = "#FFFFFF";
+    var w = 100;
+    var h = 16;
+    var x = 260;
+    var y = 4;
+    //canvas_ctx.fillRect(x, y, w, h);
+    //canvas_ctx.strokeRect(x, y, w, h);
+    canvas_ctx.fillStyle = "#000000";
+    canvas_ctx.textAlign = "center";
+    canvas_ctx.fillText("RANKING", x + w / 2, y + h / 2);
 }
 
 document.addEventListener('keydown', (event) => {
