@@ -146,6 +146,17 @@ function nes_load_url(canvas_id, path) {
     req.send();
 }
 
+function nes_clear_all_buttons() {
+    nes.buttonUp(1, jsnes.Controller.BUTTON_UP);
+    nes.buttonUp(1, jsnes.Controller.BUTTON_DOWN);
+    nes.buttonUp(1, jsnes.Controller.BUTTON_LEFT);
+    nes.buttonUp(1, jsnes.Controller.BUTTON_RIGHT);
+    nes.buttonUp(1, jsnes.Controller.BUTTON_A);
+    nes.buttonUp(1, jsnes.Controller.BUTTON_B);
+    nes.buttonUp(1, jsnes.Controller.BUTTON_SELECT);
+    nes.buttonUp(1, jsnes.Controller.BUTTON_START);
+}
+
 document.addEventListener('keydown', (event) => {
     keyboard(nes.buttonDown, event)
 });

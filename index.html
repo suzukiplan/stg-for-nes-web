@@ -13,7 +13,10 @@
         window.onGameOver = function(score) {
             console.log("GAME OVER: SCORE=" + score);
             window.RPGAtsumaru.experimental.scoreboards.setRecord(1, score);
-            window.RPGAtsumaru.experimental.scoreboards.display(1);
+            setTimeout(function() {
+                window.RPGAtsumaru.experimental.scoreboards.display(1);
+                nes_clear_all_buttons();
+            }, 500);
         }
         window.onload = function() {
             nes_load_url("nes-canvas", "stg.png");
