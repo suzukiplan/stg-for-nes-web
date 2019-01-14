@@ -24,12 +24,21 @@ var nes = new jsnes.NES({
     },
 });
 
+window.detectGameOver = false;
+
 function onAnimationFrame() {
     window.requestAnimationFrame(onAnimationFrame);
-
     image.data.set(framebuffer_u8);
     canvas_ctx.putImageData(image, 0, 0);
     nes.frame();
+    if (window.onGameOver) {
+        if (!window.detectGameOver && 0 != nes.cpu.mem[1] && 0 == nes.cpu.mem[15]) {
+            window.detectGameOver = true;
+            window.onGameOver(10 * (parseInt(nes.cpu.mem[22]) + parseInt(nes.cpu.mem[23]) * 256 + parseInt(nes.cpu.mem[24]) * 65536));
+        } else if (0 == nes.cpu.mem[1]) {
+            window.detectGameOver = false;
+        }
+    }
 }
 
 function audio_remain() {
@@ -135,6 +144,17 @@ function nes_load_url(canvas_id, path) {
     };
 
     req.send();
+}
+
+function nes_clear_all_buttons() {
+    nes.buttonUp(1, jsnes.Controller.BUTTON_UP);
+    nes.buttonUp(1, jsnes.Controller.BUTTON_DOWN);
+    nes.buttonUp(1, jsnes.Controller.BUTTON_LEFT);
+    nes.buttonUp(1, jsnes.Controller.BUTTON_RIGHT);
+    nes.buttonUp(1, jsnes.Controller.BUTTON_A);
+    nes.buttonUp(1, jsnes.Controller.BUTTON_B);
+    nes.buttonUp(1, jsnes.Controller.BUTTON_SELECT);
+    nes.buttonUp(1, jsnes.Controller.BUTTON_START);
 }
 
 document.addEventListener('keydown', (event) => {
