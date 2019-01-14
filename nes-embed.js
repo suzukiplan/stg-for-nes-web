@@ -24,7 +24,7 @@ var nes = new jsnes.NES({
     },
 });
 
-var detectGameOver = false;
+window.detectGameOver = false;
 
 function onAnimationFrame() {
     window.requestAnimationFrame(onAnimationFrame);
