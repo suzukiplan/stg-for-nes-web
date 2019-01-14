@@ -127,6 +127,7 @@ function nes_load_data(canvas_id, rom_data) {
 
 function nes_load_url(canvas_id, path) {
     nes_init(canvas_id);
+    setup_atsumaru_virtual_pad();
 
     var req = new XMLHttpRequest();
     req.open("GET", path);
@@ -144,6 +145,44 @@ function nes_load_url(canvas_id, path) {
     };
 
     req.send();
+}
+
+// setup virtual pad of RPG Atsumaru
+function setup_atsumaru_virtual_pad() {
+    if (window.RPGAtsumaru.controllers.defaultController.subscribe) {
+        window.RPGAtsumaru.controllers.defaultController.subscribe(function(event) {
+            var key = undefined;
+            switch (event.key) {
+                case 0:
+                    key = jsnes.Controller.BUTTON_LEFT;
+                    break;
+                case 1:
+                    key = jsnes.Controller.BUTTON_UP;
+                    break;
+                case 2:
+                    key = jsnes.Controller.BUTTON_RIGHT;
+                    break;
+                case 3:
+                    key = jsnes.Controller.BUTTON_DOWN;
+                    break;
+                case 4:
+                    key = jsnes.Controller.BUTTON_START;
+                    break;
+                case 5:
+                    key = jsnes.Controller.BUTTON_A;
+                    break;
+            }
+            if (key) {
+                if (event.type === 'keydown') {
+                    nes.buttonDown(1, key);
+                } else {
+                    nes.buttonUp(1, key);
+                }
+            }
+        });
+    } else {
+        console.log("RPG atsumaru v-pad does not exist.");
+    }
 }
 
 function nes_clear_all_buttons() {
