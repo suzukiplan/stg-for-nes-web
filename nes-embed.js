@@ -127,7 +127,6 @@ function nes_load_data(canvas_id, rom_data) {
 
 function nes_load_url(canvas_id, path) {
     nes_init(canvas_id);
-    setup_atsumaru_virtual_pad();
 
     var req = new XMLHttpRequest();
     req.open("GET", path);
@@ -153,26 +152,26 @@ function setup_atsumaru_virtual_pad() {
         window.RPGAtsumaru.controllers.defaultController.subscribe(function(event) {
             var key = undefined;
             switch (event.key) {
-                case 0:
+                case "left":
                     key = jsnes.Controller.BUTTON_LEFT;
                     break;
-                case 1:
+                case "up":
                     key = jsnes.Controller.BUTTON_UP;
                     break;
-                case 2:
+                case "right":
                     key = jsnes.Controller.BUTTON_RIGHT;
                     break;
-                case 3:
+                case "down":
                     key = jsnes.Controller.BUTTON_DOWN;
                     break;
-                case 4:
+                case "ok":
                     key = jsnes.Controller.BUTTON_START;
                     break;
-                case 5:
+                case "cancel":
                     key = jsnes.Controller.BUTTON_A;
                     break;
             }
-            if (key) {
+            if (undefined !== key) {
                 if (event.type === 'keydown') {
                     nes.buttonDown(1, key);
                 } else {
