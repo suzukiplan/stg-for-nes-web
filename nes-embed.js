@@ -226,7 +226,7 @@ function update_ranking_list() {
         var myIndex = undefined;
         if (board.myBestRecord) {
             for (var i = 0; i < board.ranking.length; i++) {
-                if (board.ranking[i].rank == board.myBestRecord.rank) {
+                if (board.ranking[i].rank == board.myBestRecord.rank && board.ranking[i].userName == board.myBestRecord.userName) {
                     myIndex = i;
                     break;
                 }
