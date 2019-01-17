@@ -2,6 +2,8 @@ var SCREEN_WIDTH = 256;
 var SCREEN_HEIGHT = 240;
 var FRAMEBUFFER_SIZE = SCREEN_WIDTH * SCREEN_HEIGHT;
 
+var canvas_main;
+var canvas_nes;
 var canvas_ctx, image;
 var framebuffer_u8, framebuffer_u32;
 
@@ -30,6 +32,10 @@ function onAnimationFrame() {
     window.requestAnimationFrame(onAnimationFrame);
     image.data.set(framebuffer_u8);
     canvas_ctx.putImageData(image, 0, 0);
+    canvas_main.save();
+    canvas_main.scale(2, 2);
+    canvas_main.drawImage(canvas_nes, 0, 0);
+    canvas_main.restore();
     nes.frame();
     if (window.onGameOver) {
         if (!window.detectGameOver && 0 != nes.cpu.mem[1] && 0 == nes.cpu.mem[15]) {
@@ -96,8 +102,8 @@ function keyboard(callback, event) {
 }
 
 function nes_init(canvas_id) {
-    var canvas = document.getElementById(canvas_id);
-    canvas_ctx = canvas.getContext("2d");
+    canvas_nes = document.getElementById(canvas_id);
+    canvas_ctx = canvas_nes.getContext("2d");
     image = canvas_ctx.getImageData(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
     canvas_ctx.fillStyle = "black";
@@ -127,7 +133,8 @@ function nes_load_data(canvas_id, rom_data) {
 
 function nes_load_url(canvas_id, path) {
     nes_init(canvas_id);
-
+    var canvas = document.getElementById('main-canvas');
+    canvas_main = canvas.getContext("2d");
     var req = new XMLHttpRequest();
     req.open("GET", path);
     req.overrideMimeType("text/plain; charset=x-user-defined");
@@ -148,7 +155,7 @@ function nes_load_url(canvas_id, path) {
 
 // setup virtual pad of RPG Atsumaru
 function setup_atsumaru_virtual_pad() {
-    if (window.RPGAtsumaru.controllers.defaultController.subscribe) {
+    if (window.RPGAtsumaru) {
         window.RPGAtsumaru.controllers.defaultController.subscribe(function(event) {
             var key = undefined;
             switch (event.key) {
@@ -193,6 +200,72 @@ function nes_clear_all_buttons() {
     nes.buttonUp(1, jsnes.Controller.BUTTON_B);
     nes.buttonUp(1, jsnes.Controller.BUTTON_SELECT);
     nes.buttonUp(1, jsnes.Controller.BUTTON_START);
+}
+
+function update_ranking_list() {
+    canvas_main.save();
+    canvas_main.scale(1, 1);
+    canvas_main.beginPath();
+    canvas_main.fillStyle = "#2040a0";
+    canvas_main.fillRect(512, 0, 128, 480);
+    canvas_main.font = "12px Arial";
+    canvas_main.fillStyle = "#ffffff";
+    canvas_main.textAlign = "center";
+    canvas_main.fillText("SCORE RANKING", 512 + 64, 12, 128);
+
+    var bp = window.RPGAtsumaru.experimental.scoreboards.getRecords(1);
+    if (!bp) return;
+    bp.then(function(board) {
+        var startIndex = 0;
+        var myIndex = undefined;
+        if (board.myBestRecord) {
+            for (var i = 0; i < board.ranking.length; i++) {
+                if (board.ranking[i].rank == board.myBestRecord.rank) {
+                    myIndex = i;
+                    break;
+                }
+            }
+            if (undefined == myIndex || myIndex < 10 || board.ranking.length < 20) {
+                // 頭から表示
+                startIndex = 0;
+            } else if (board.ranking.length - myIndex < 10) {
+                // 末尾から表示
+                startIndex = board.ranking.length - 20;
+            } else {
+                // 自分より上の10人, 自分, 下の9人を表示
+                startIndex = myIndex - 10;
+            }
+        }
+        for (var i = 0; i < 20; i++) {
+            var ii = i + startIndex;
+            if (board.ranking.length <= ii) break;
+            var rank = board.ranking[ii].rank;
+            switch (rank % 10) {
+                case 1:
+                    rank = rank + "st";
+                    break;
+                case 2:
+                    rank = rank + "nd";
+                    break;
+                case 3:
+                    rank = rank + "rd";
+                    break;
+                default:
+                    rank = rank + "th";
+                    break;
+            }
+            canvas_main.fillStyle = ii === myIndex ? "#c02020" : "#2020b0";
+            canvas_main.fillRect(512, 25 + 2 + i * 22.5, 128, -11);
+            canvas_main.font = "10px Arial";
+            canvas_main.fillStyle = "#a0a0a0";
+            canvas_main.textAlign = "left";
+            canvas_main.fillText(rank + " " + board.ranking[ii].score + "pts", 512 + 4, 25 + i * 22.5, 120);
+            canvas_main.fillStyle = "#c0c0c0";
+            canvas_main.textAlign = "left";
+            canvas_main.fillText(board.ranking[ii].userName, 512 + 16, 35 + i * 22.5, 128 - 16 - 4);
+        }
+        canvas_main.restore();
+    });
 }
 
 document.addEventListener('keydown', (event) => {

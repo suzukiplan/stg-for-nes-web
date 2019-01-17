@@ -12,22 +12,26 @@
     <script>
         window.onGameOver = function(score) {
             console.log("GAME OVER: SCORE=" + score);
-            window.RPGAtsumaru.experimental.scoreboards.setRecord(1, score);
-            setTimeout(function() {
-                window.RPGAtsumaru.experimental.scoreboards.display(1);
-                nes_clear_all_buttons();
-            }, 500);
+            if (window.RPGAtsumaru) {
+                window.RPGAtsumaru.experimental.scoreboards.setRecord(1, score);
+                setTimeout(function() {
+                    update_ranking_list();
+                    nes_clear_all_buttons();
+                }, 500);
+            }
         }
         window.onload = function() {
             nes_load_url("nes-canvas", "stg.png");
             setup_atsumaru_virtual_pad();
+            update_ranking_list();
         }
     </script>
 </head>
 
 <body>
     <div>
-        <canvas id="nes-canvas" width="256" height="240" style="width: 100%" />
+        <canvas id="main-canvas" width="640" height="480" style="width: 100%" />
+        <canvas id="nes-canvas" width="256" height="240" />
     </div>
 </body>
 
