@@ -136,15 +136,10 @@ function nes_load_url(canvas_id, path) {
     var canvas = document.getElementById('main-canvas');
     canvas_main = canvas.getContext("2d");
     canvas.addEventListener('touchend', function(event) {
-        if (512 < event.changedTouches[0].pageX) {
-            window.RPGAtsumaru.experimental.scoreboards.display(1);
-        }
+        window.RPGAtsumaru.experimental.scoreboards.display(1);
     }, false);
     canvas.addEventListener('click', function(event) {
-        var rect = event.target.getBoundingClientRect();
-        if (512 < event.clientX - rect.left) {
-            window.RPGAtsumaru.experimental.scoreboards.display(1);
-        }
+        window.RPGAtsumaru.experimental.scoreboards.display(1);
     }, false);
     var req = new XMLHttpRequest();
     req.open("GET", path);
