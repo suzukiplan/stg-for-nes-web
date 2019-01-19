@@ -352,39 +352,34 @@ function audio_callback(event) {
 
 function keyboard(callback, event) {
     var player = 1;
-    switch (event.keyCode) {
-        case key_config.up:
-            callback(player, jsnes.Controller.BUTTON_UP);
-            break;
-        case key_config.down:
-            callback(player, jsnes.Controller.BUTTON_DOWN);
-            break;
-        case key_config.left:
-            callback(player, jsnes.Controller.BUTTON_LEFT);
-            break;
-        case key_config.right:
-            callback(player, jsnes.Controller.BUTTON_RIGHT);
-            break;
-        case key_config.a:
-            callback(player, jsnes.Controller.BUTTON_A);
-            break;
-        case key_config.b:
-            callback(player, jsnes.Controller.BUTTON_B);
-            break;
-        case key_config.select:
-            callback(player, jsnes.Controller.BUTTON_SELECT);
-            break;
-        case key_config.start:
-            callback(player, jsnes.Controller.BUTTON_START);
-            break;
-        case key_config.config:
-            key_config_input = undefined;
-            key_config_pos = 0;
-            start_key_config = true;
-            break;
-        default:
-            console.log("event.keyCode: " + event.keyCode);
-            break;
+    if (key_config.up == event.keyCode) {
+        callback(player, jsnes.Controller.BUTTON_UP);
+    }
+    if (key_config.down == event.keyCode) {
+        callback(player, jsnes.Controller.BUTTON_DOWN);
+    }
+    if (key_config.left == event.keyCode) {
+        callback(player, jsnes.Controller.BUTTON_LEFT);
+    }
+    if (key_config.right == event.keyCode) {
+        callback(player, jsnes.Controller.BUTTON_RIGHT);
+    }
+    if (key_config.a == event.keyCode) {
+        callback(player, jsnes.Controller.BUTTON_A);
+    }
+    if (key_config.b == event.keyCode) {
+        callback(player, jsnes.Controller.BUTTON_B);
+    }
+    if (key_config.select == event.keyCode) {
+        callback(player, jsnes.Controller.BUTTON_SELECT);
+    }
+    if (key_config.start == event.keyCode) {
+        callback(player, jsnes.Controller.BUTTON_START);
+    }
+    if (key_config.config == event.keyCode) {
+        key_config_input = undefined;
+        key_config_pos = 0;
+        start_key_config = true;
     }
 }
 
