@@ -4,9 +4,10 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>COSMIC SHOOTER - WEB PLAY</title>
+    <title>JSNES ON RPG ATSUMARU</title>
 
     <script type="text/javascript" src="jsnes.min.js"></script>
+    <script type="text/javascript" src="wram-check.js"></script>
     <script type="text/javascript" src="nes-embed.js"></script>
     <script type="text/javascript" src="AtsumaruScoreboardsExperimental.js"></script>
     <script>
@@ -39,12 +40,12 @@
                             }
                         }
                     }
-                    nes_load_url("nes-canvas", "stg.png");
+                    nes_load_url("nes-canvas", "game.png");
                     setup_atsumaru_virtual_pad();
                     update_ranking_list();
                 });
             } else {
-                nes_load_url("nes-canvas", "stg.png");
+                nes_load_url("nes-canvas", "game.png");
                 setup_atsumaru_virtual_pad();
                 update_ranking_list();
             }
