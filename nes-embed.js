@@ -418,13 +418,23 @@ function nes_load_url(canvas_id, path) {
     var canvas = document.getElementById('main-canvas');
     canvas_main = canvas.getContext("2d");
     canvas.addEventListener('touchend', function(event) {
-        if (window.RPGAtsumaru) {
-            window.RPGAtsumaru.experimental.scoreboards.display(1);
+        var z = 640 / canvas.clientWidth;
+        var x = event.offsetX * z;
+        if (512 <= x && x < 640) {
+            console.log("open leaderboard");
+            if (window.RPGAtsumaru) {
+                window.RPGAtsumaru.experimental.scoreboards.display(1);
+            }
         }
     }, false);
     canvas.addEventListener('click', function(event) {
-        if (window.RPGAtsumaru) {
-            window.RPGAtsumaru.experimental.scoreboards.display(1);
+        var z = 640 / canvas.clientWidth;
+        var x = event.offsetX * z;
+        if (512 <= x && x < 640) {
+            console.log("open leaderboard");
+            if (window.RPGAtsumaru) {
+                window.RPGAtsumaru.experimental.scoreboards.display(1);
+            }
         }
     }, false);
     var req = new XMLHttpRequest();
@@ -505,7 +515,20 @@ function update_ranking_list() {
     canvas_main.textAlign = "center";
     canvas_main.fillText("SCORE RANKING", 512 + 64, 12, 128);
 
-    if (!window.RPGAtsumaru) return;
+    if (!window.RPGAtsumaru) {
+        for (var i = 0; i < 20; i++) {
+            canvas_main.fillStyle = "#2020b0";
+            canvas_main.fillRect(512, 25 + 2 + i * 22.5, 128, -11);
+            canvas_main.font = "10px Arial";
+            canvas_main.fillStyle = "#a0a0a0";
+            canvas_main.textAlign = "left";
+            canvas_main.fillText("?????pts", 512 + 4, 25 + i * 22.5, 120);
+            canvas_main.fillStyle = "#c0c0c0";
+            canvas_main.textAlign = "left";
+            canvas_main.fillText("UserName", 512 + 16, 35 + i * 22.5, 128 - 16 - 4);
+        }
+        return;
+    }
     var bp = window.RPGAtsumaru.experimental.scoreboards.getRecords(1);
     if (!bp) return;
     bp.then(function(board) {
