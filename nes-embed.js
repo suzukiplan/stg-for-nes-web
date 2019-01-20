@@ -319,10 +319,10 @@ function onAnimationFrame() {
     canvas_main.restore();
     nes.frame();
     if (window.onGameOver) {
-        if (!window.detectGameOver && 0 != nes.cpu.mem[1] && 0 == nes.cpu.mem[15]) {
+        if (!window.detectGameOver && wram_check_onStartGameOver()) {
             window.detectGameOver = true;
-            window.onGameOver(10 * (parseInt(nes.cpu.mem[22]) + parseInt(nes.cpu.mem[23]) * 256 + parseInt(nes.cpu.mem[24]) * 65536));
-        } else if (0 == nes.cpu.mem[1]) {
+            window.onGameOver(wram_check_getScore());
+        } else if (wram_check_onEndGameOver()) {
             window.detectGameOver = false;
         }
     }
@@ -515,20 +515,7 @@ function update_ranking_list() {
     canvas_main.textAlign = "center";
     canvas_main.fillText("SCORE RANKING", 512 + 64, 12, 128);
 
-    if (!window.RPGAtsumaru) {
-        for (var i = 0; i < 20; i++) {
-            canvas_main.fillStyle = "#2020b0";
-            canvas_main.fillRect(512, 25 + 2 + i * 22.5, 128, -11);
-            canvas_main.font = "10px Arial";
-            canvas_main.fillStyle = "#a0a0a0";
-            canvas_main.textAlign = "left";
-            canvas_main.fillText("?????pts", 512 + 4, 25 + i * 22.5, 120);
-            canvas_main.fillStyle = "#c0c0c0";
-            canvas_main.textAlign = "left";
-            canvas_main.fillText("UserName", 512 + 16, 35 + i * 22.5, 128 - 16 - 4);
-        }
-        return;
-    }
+    if (!window.RPGAtsumaru) return;
     var bp = window.RPGAtsumaru.experimental.scoreboards.getRecords(1);
     if (!bp) return;
     bp.then(function(board) {
